@@ -230,7 +230,14 @@ function Scratchpad:turn_on()
     if not self.client then
         -- if no client was found, spawn one, find the corresponding window,
         --  apply the properties only once (until the next closing)
-        local pid = awful.spawn.with_shell(self.command)
+
+        if type(self.command) == "function"
+        then
+            local pid = self.command()
+        else
+            local pid = awful.spawn.with_shell(self.command)
+        end
+
         if capi.awesome.version ~= "v4.3" then
             ruled.client.append_rule({
                 id = "scratchpad",
